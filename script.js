@@ -39,8 +39,10 @@ function exchangeCodeForToken(code) {
     .then(data => {
       if (data.access_token) {
         console.log('Access Token erhalten:', data.access_token);
-        // Du kannst das Access Token hier speichern und verwenden, um API-Anfragen zu machen
+        // Speichern des Tokens im localStorage
         localStorage.setItem('access_token', data.access_token);
+        // Button ausblenden, da die Verbindung zu Spotify hergestellt wurde
+        document.getElementById('connect-button').classList.add('hide');
         // Nach dem Erhalt des Tokens die Playlist laden
         loadPlaylist();
       } else {
