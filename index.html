@@ -10,19 +10,34 @@
   <header>
     <h1>Willkommen zum Musikquiz!</h1>
   </header>
+  
+  <div id="player-info">
+    <label for="player-name">Spielername:</label>
+    <input type="text" id="player-name" placeholder="Gib deinen Namen ein" />
+    <button id="start-game" onclick="startGame()">Spiel starten</button>
+  </div>
+  
+  <section id="game">
+    <div id="song-info">
+      <!-- Hier wird später der Song angezeigt -->
+    </div>
 
-  <section id="song-list">
-    <!-- Hier werden später die Songs angezeigt -->
+    <div id="answer-field">
+      <input type="text" id="answer" placeholder="Antwort eingeben" />
+      <button onclick="checkAnswer()">Antwort abgeben</button>
+    </div>
+
+    <div id="points-display">
+      <p id="player-points">Punkte: 0</p>
+    </div>
+
+    <button id="next-song" onclick="nextSong()">Nächster Song</button>
   </section>
-
-  <!-- Button, um den Authentifizierungsprozess zu starten -->
-  <button onclick="redirectToSpotifyAuth()">Mit Spotify verbinden</button>
-
+  
   <footer>
     <p>Powered by Spotify API</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script> <!-- QR-Code-Bibliothek -->
-  <script src="script.js"></script> <!-- Dein eigenes JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
