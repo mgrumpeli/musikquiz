@@ -52,3 +52,21 @@ button {
 button:hover {
   background-color: #1ed760;
 }
+
+/* Beispiel: Einfaches Styling für die Songs */
+.song-item {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.song-item h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.song-item p {
+  margin: 5px 0;
+}
