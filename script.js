@@ -44,14 +44,40 @@ function playNextSong() {
     const songName = song.track.name;
     const artist = song.track.artists[0].name;
 
+    // Songname und Künstler anzeigen
     document.getElementById('song-info').textContent = `Song: ${songName} - Artist: ${artist}`;
     
     // Hier könnte die Spotify-Wiedergabe-API eingebunden werden, um den Song abzuspielen
-
+    playSongOnSpotify(song.track.uri);
+    
     currentSongIndex++;
   } else {
     alert('Das Spiel ist zu Ende!');
   }
+}
+
+// Song über Spotify abspielen
+function playSongOnSpotify(songUri) {
+  const accessToken = localStorage.getItem('access_token');
+  
+  fetch('https://api.spotify.com/v1/me/player/play', {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      uris: [songUri]
+    })
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Song wird abgespielt');
+      } else {
+        console.error('Fehler beim Abspielen des Songs:', response);
+      }
+    })
+    .catch(error => console.error('Fehler beim Abspielen des Songs:', error));
 }
 
 // Antwort überprüfen
@@ -88,4 +114,5 @@ function resetGame() {
   currentSongIndex = 0;
   document.getElementById('player-points').textContent = 'Punkte: 0';
   document.getElementById('answer').value = '';
+  loadPlaylist(); // Playlist erneut laden
 }
