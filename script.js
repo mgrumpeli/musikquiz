@@ -39,8 +39,13 @@ function exchangeCodeForToken(code) {
     .then(data => {
       if (data.access_token) {
         console.log('Access Token erhalten:', data.access_token);
-        // Du kannst das Access Token hier speichern und verwenden, um API-Anfragen zu machen
+        // Speichere das Access Token im Local Storage
         localStorage.setItem('access_token', data.access_token);
+
+        // Ändere den Button-Text nach erfolgreicher Verbindung
+        document.getElementById('connect-button').textContent = "Erfolgreich verbunden!";
+        
+        // Optional: Weiterführende Schritte, wie API-Anfragen, hier einfügen
       } else {
         console.error('Fehler beim Abrufen des Access Tokens:', data);
       }
@@ -54,7 +59,12 @@ function exchangeCodeForToken(code) {
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code'); // Code aus der URL holen
 if (code) {
-  exchangeCodeForToken(code);
+  exchangeCodeForToken(code); // Wenn der Code vorhanden ist, Token anfordern
 } else {
   console.log('Kein Code in der URL gefunden');
 }
+
+// Button Eventlistener: Wenn der Button geklickt wird, leite den Benutzer zur Spotify-Authentifizierungsseite weiter
+document.getElementById('connect-button').addEventListener('click', function() {
+  redirectToSpotifyAuth(); // Benutzer zur Spotify-Auth-Seite weiterleiten
+});
