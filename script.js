@@ -1,25 +1,21 @@
-// Deine Client ID und Client Secret (direkt von Spotify)
-const clientId = '4ad5305537e04829849e01baa716e4d4'; // DEINE CLIENT ID
-const clientSecret = '9283743107c04edda09bad5480192a8e'; // DEIN CLIENT SECRET
+const clientId = '4ad5305537e04829849e01baa716e4d4'; // Deine Client ID
+const clientSecret = '9283743107c04edda09bad5480192a8e'; // Dein Client Secret
 const redirectUri = 'https://mgrumpeli.github.io/musikquiz/'; // Deine Redirect URI
 
-// Die URL für den Authentifizierungs-Endpunkt
 const authEndpoint = 'https://accounts.spotify.com/authorize';
+const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 
-// Die erforderlichen Berechtigungen für die API (Scopes)
+// Berechtigungen (Scopes), die du für den Zugriff auf die API benötigst
 const scopes = 'user-library-read user-read-playback-state user-modify-playback-state';
 
-// Funktion, um den Benutzer zur Spotify-Auth-Seite weiterzuleiten
+// Funktion zur Weiterleitung zur Spotify-Auth-Seite
 function redirectToSpotifyAuth() {
   const authUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&response_type=code`;
-  window.location.href = authUrl; // Weiterleitung zur Spotify-Authentifizierungsseite
+  window.location.href = authUrl;
 }
 
 // Funktion zum Austausch des Codes gegen ein Access Token
 function exchangeCodeForToken(code) {
-  const tokenEndpoint = 'https://accounts.spotify.com/api/token';
-
-  // Die notwendigen Daten für den Token-Austausch
   const data = new URLSearchParams();
   data.append('grant_type', 'authorization_code');
   data.append('code', code);
@@ -27,7 +23,7 @@ function exchangeCodeForToken(code) {
   data.append('client_id', clientId);
   data.append('client_secret', clientSecret);
 
-  // Sende die Anfrage zum Token-Endpunkt
+  // Anfrage zum Token-Endpunkt
   fetch(tokenEndpoint, {
     method: 'POST',
     headers: {
@@ -39,13 +35,11 @@ function exchangeCodeForToken(code) {
     .then(data => {
       if (data.access_token) {
         console.log('Access Token erhalten:', data.access_token);
-        // Speichere das Access Token im Local Storage
+        // Das Access Token speichern (z.B. im Local Storage)
         localStorage.setItem('access_token', data.access_token);
 
-        // Ändere den Button-Text nach erfolgreicher Verbindung
+        // Button-Text ändern, um den Benutzer zu informieren
         document.getElementById('connect-button').textContent = "Erfolgreich verbunden!";
-        
-        // Optional: Weiterführende Schritte, wie API-Anfragen, hier einfügen
       } else {
         console.error('Fehler beim Abrufen des Access Tokens:', data);
       }
@@ -55,16 +49,18 @@ function exchangeCodeForToken(code) {
     });
 }
 
-// Hol den Code aus der URL und tausche ihn gegen das Access Token
+// Hole den Code aus der URL, falls vorhanden
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('code'); // Code aus der URL holen
+
 if (code) {
-  exchangeCodeForToken(code); // Wenn der Code vorhanden ist, Token anfordern
+  // Code gegen das Access Token tauschen
+  exchangeCodeForToken(code);
 } else {
   console.log('Kein Code in der URL gefunden');
 }
 
-// Button Eventlistener: Wenn der Button geklickt wird, leite den Benutzer zur Spotify-Authentifizierungsseite weiter
+// Button-Eventlistener
 document.getElementById('connect-button').addEventListener('click', function() {
-  redirectToSpotifyAuth(); // Benutzer zur Spotify-Auth-Seite weiterleiten
+  redirectToSpotifyAuth(); // Weiterleitung zur Authentifizierungsseite
 });
