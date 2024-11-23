@@ -41,10 +41,8 @@ function exchangeCodeForToken(code) {
         console.log('Access Token erhalten:', data.access_token);
         // Du kannst das Access Token hier speichern und verwenden, um API-Anfragen zu machen
         localStorage.setItem('access_token', data.access_token);
-        
-        // Status ändern, um anzuzeigen, dass die Authentifizierung erfolgreich war
-        document.getElementById('auth-status').textContent = 'Erfolgreich mit Spotify verbunden!';
-        document.getElementById('auth-button').style.display = 'none'; // Button ausblenden
+        // Nach dem Erhalt des Tokens die Playlist laden
+        loadPlaylist();
       } else {
         console.error('Fehler beim Abrufen des Access Tokens:', data);
       }
@@ -63,13 +61,78 @@ if (code) {
   console.log('Kein Code in der URL gefunden');
 }
 
-// Funktion, um den Button anzuzeigen, wenn der Benutzer noch nicht authentifiziert ist
-window.onload = function() {
-  const accessToken = localStorage.getItem('access_token');
+// Funktion zum Laden der Playlist
+function loadPlaylist() {
+  const accessToken = localStorage.getItem('access_token'); // Access Token aus dem localStorage holen
+  const playlistId = '15UCVVElT6HxNsAB3ah1aN'; // Playlist-ID, die du verwenden möchtest
+
   if (accessToken) {
-    document.getElementById('auth-status').textContent = 'Erfolgreich mit Spotify verbunden!';
-    document.getElementById('auth-button').style.display = 'none'; // Button ausblenden, wenn schon verbunden
+    // Abrufen der Playlist-Songs
+    fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`, // Token im Header hinzufügen
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Playlist-Daten erhalten
+        console.log('Playlist Songs:', data);
+
+        // Songs auf der Webseite anzeigen
+        displaySongs(data.items);
+
+        // Wenn mehr als 100 Songs vorhanden sind, gibt es eine nächste Seite
+        if (data.next) {
+          fetchMoreTracks(data.next);
+        }
+      })
+      .catch(error => console.error('Fehler beim Abrufen der Playlist:', error));
   } else {
-    document.getElementById('auth-status').textContent = 'Bitte mit Spotify verbinden';
+    console.log('Kein Access Token gefunden');
   }
-};
+}
+
+// Funktion zur Anzeige der Songs
+function displaySongs(songs) {
+  const songListContainer = document.getElementById('song-list');
+  songListContainer.innerHTML = ''; // Vorherige Songs entfernen, falls vorhanden
+
+  songs.forEach(item => {
+    const songElement = document.createElement('div');
+    songElement.classList.add('song-item');
+    songElement.innerHTML = `
+      <h3>${item.track.name}</h3>
+      <p>Von: ${item.track.artists.map(artist => artist.name).join(', ')}</p>
+      <p>Album: ${item.track.album.name}</p>
+    `;
+    songListContainer.appendChild(songElement);
+  });
+}
+
+// Funktion zur Verarbeitung der nächsten Seite (bei mehr als 100 Songs)
+function fetchMoreTracks(nextUrl) {
+  const accessToken = localStorage.getItem('access_token');
+  
+  if (accessToken) {
+    fetch(nextUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Weitere Songs anzeigen
+        displaySongs(data.items);
+
+        // Weitere Seite abrufen, falls vorhanden
+        if (data.next) {
+          fetchMoreTracks(data.next);
+        }
+      })
+      .catch(error => console.error('Fehler beim Abrufen der nächsten Seite:', error));
+  } else {
+    console.log('Kein Access Token gefunden');
+  }
+}
