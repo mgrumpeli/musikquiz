@@ -81,11 +81,6 @@ function loadPlaylist() {
 
         // Songs auf der Webseite anzeigen
         displaySongs(data.items);
-
-        // Wenn mehr als 100 Songs vorhanden sind, gibt es eine nächste Seite
-        if (data.next) {
-          fetchMoreTracks(data.next);
-        }
       })
       .catch(error => console.error('Fehler beim Abrufen der Playlist:', error));
   } else {
@@ -108,31 +103,4 @@ function displaySongs(songs) {
     `;
     songListContainer.appendChild(songElement);
   });
-}
-
-// Funktion zur Verarbeitung der nächsten Seite (bei mehr als 100 Songs)
-function fetchMoreTracks(nextUrl) {
-  const accessToken = localStorage.getItem('access_token');
-  
-  if (accessToken) {
-    fetch(nextUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Weitere Songs anzeigen
-        displaySongs(data.items);
-
-        // Weitere Seite abrufen, falls vorhanden
-        if (data.next) {
-          fetchMoreTracks(data.next);
-        }
-      })
-      .catch(error => console.error('Fehler beim Abrufen der nächsten Seite:', error));
-  } else {
-    console.log('Kein Access Token gefunden');
-  }
 }
