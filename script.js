@@ -1,3 +1,4 @@
+// Deine Client ID und Client Secret (direkt von Spotify)
 const clientId = '4ad5305537e04829849e01baa716e4d4'; // Deine Client ID
 const clientSecret = '9283743107c04edda09bad5480192a8e'; // Dein Client Secret
 const redirectUri = 'https://mgrumpeli.github.io/musikquiz/'; // Deine Redirect URI
