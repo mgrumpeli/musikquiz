@@ -69,7 +69,7 @@ function loadPlaylist() {
   const playlistId = '15UCVVElT6HxNsAB3ah1aN'; // Playlist-ID, die du verwenden möchtest
 
   if (accessToken) {
-    // Abrufen der Playlist-Songs
+    // Abrufen der Playlist-Songs, aber die Anzeige überspringen
     fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
       method: 'GET',
       headers: {
@@ -78,31 +78,11 @@ function loadPlaylist() {
     })
       .then(response => response.json())
       .then(data => {
-        // Playlist-Daten erhalten
         console.log('Playlist Songs:', data);
-
-        // Songs auf der Webseite anzeigen
-        displaySongs(data.items);
+        // Hier passiert nichts weiter, keine Anzeige der Songs auf der Seite
       })
       .catch(error => console.error('Fehler beim Abrufen der Playlist:', error));
   } else {
     console.log('Kein Access Token gefunden');
   }
-}
-
-// Funktion zur Anzeige der Songs
-function displaySongs(songs) {
-  const songListContainer = document.getElementById('song-list');
-  songListContainer.innerHTML = ''; // Vorherige Songs entfernen, falls vorhanden
-
-  songs.forEach(item => {
-    const songElement = document.createElement('div');
-    songElement.classList.add('song-item');
-    songElement.innerHTML = `
-      <h3>${item.track.name}</h3>
-      <p>Von: ${item.track.artists.map(artist => artist.name).join(', ')}</p>
-      <p>Album: ${item.track.album.name}</p>
-    `;
-    songListContainer.appendChild(songElement);
-  });
 }
