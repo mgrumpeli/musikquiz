@@ -15,15 +15,16 @@
     <!-- Hier kommen später die Song-Karten -->
   </section>
   
+  <!-- Status-Anzeige -->
+  <p id="auth-status">Bitte mit Spotify verbinden</p>
+
   <!-- Button, um den Authentifizierungsprozess zu starten -->
-  <button onclick="redirectToSpotifyAuth()">Mit Spotify verbinden</button>
+  <button id="auth-button" onclick="redirectToSpotifyAuth()">Mit Spotify verbinden</button>
 
   <footer>
     <p>Powered by Spotify API</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script> <!-- QR-Code-Bibliothek -->
   <script src="script.js"></script> <!-- Dein eigenes JavaScript -->
 </body>
 </html>
-
