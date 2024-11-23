@@ -13,6 +13,7 @@ const tokenEndpoint = 'https://accounts.spotify.com/api/token';
 
 // Die erforderlichen Berechtigungen für die API (Scopes)
 const scopes = 'user-library-read user-read-playback-state user-modify-playback-state';
+
 function redirectToSpotifyAuth() {
   const authUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&response_type=code`;
   window.location.href = authUrl; // Weiterleitung zur Spotify-Authentifizierungsseite
