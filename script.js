@@ -1,5 +1,5 @@
-const clientId = 'DEIN_CLIENT_ID';
-const clientSecret = 'DEIN_CLIENT_SECRET';
+const clientId = '4ad5305537e04829849e01baa716e4d4';
+const clientSecret = '9283743107c04edda09bad5480192a8e';
 const redirectUri = 'https://mgrumpeli.github.io/musikquiz/'; // Deine Redirect URI
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 const tokenEndpoint = 'https://accounts.spotify.com/api/token';
